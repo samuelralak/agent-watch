@@ -12,8 +12,9 @@ your sessions.
 
 ## Which sessions appear
 
-Every Claude Code session running on this machine: in a terminal, headless, or started from
-the Claude desktop app. Sessions that run elsewhere, such as on claude.ai/code, do not.
+Every Claude Code session running on this machine: in a terminal, headless, started from the
+Claude desktop app, or from an editor extension. Sessions that run elsewhere, such as on
+claude.ai/code, do not.
 
 ## Session states
 

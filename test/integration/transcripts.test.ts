@@ -101,6 +101,28 @@ describe('history when a viewer opens', () => {
     expect(source.follow({ sessionId: 'T' })).toBe(true);
   });
 
+  it('shows what was typed in an editor, not the context the editor sent along', () => {
+    const { projects, source, store } = setup();
+
+    projects.writeMain('S', [
+      record.prompt(
+        NOW - MINUTE,
+        '<ide_opened_file>The user opened the file /work/app.ts in the IDE.</ide_opened_file>',
+      ),
+      record.prompt(NOW - MINUTE, '<browser_instruction># Browser\nLong.</browser_instruction>'),
+      record.prompt(NOW - MINUTE, 'fix the failing test'),
+    ]);
+
+    source.follow({ sessionId: 'S' });
+
+    const prompts = store
+      .session('S')
+      .main.timeline.latest(10)
+      .flatMap((entry) => (entry.kind === 'prompt' ? [entry.text] : []));
+
+    expect(prompts).toEqual(['fix the failing test']);
+  });
+
   it('is not replayed when a session drops out of the list and comes back', () => {
     const { projects, source, mainKinds } = setup();
 

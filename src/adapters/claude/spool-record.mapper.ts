@@ -1,6 +1,12 @@
 import type { DeliveryPath, WatchEvent } from '../../domain/event.js';
 import { oneLine } from '../../util/sanitize.js';
-import { AGENT_REPORT, AGENT_REPORT_NOTICE, TASK_NOTIFICATION, tagText } from './harness-text.js';
+import {
+  AGENT_REPORT,
+  AGENT_REPORT_NOTICE,
+  stripHarnessText,
+  TASK_NOTIFICATION,
+  tagText,
+} from './harness-text.js';
 import { RECEIPT_DELIVERED, RECEIPT_REJECTED } from './hook-payload.contract.js';
 import type { SpoolRecord } from './spool-record.contract.js';
 import { toolDisplayName } from './tool-names.js';
@@ -114,7 +120,10 @@ function promptSubmitted(record: SpoolRecord, base: EventBase): WatchEvent[] {
     return [{ ...base, kind: 'notice', text: AGENT_REPORT_NOTICE }];
   }
 
-  return [{ ...base, kind: 'prompt.submitted', text: text.trim() }];
+  // An editor sends the open file and the like along with what was typed: only that is shown.
+  const typed = stripHarnessText(text).trim();
+
+  return typed ? [{ ...base, kind: 'prompt.submitted', text: typed }] : [];
 }
 
 /**

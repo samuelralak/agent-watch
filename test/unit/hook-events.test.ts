@@ -334,3 +334,30 @@ describe("Claude Code's notices to the user", () => {
     ]);
   });
 });
+
+describe('a prompt sent from an editor', () => {
+  const submitted = (prompt: string) => {
+    const payload = hookPayloadSchema.parse({
+      hook_event_name: 'UserPromptSubmit',
+      session_id: 'S',
+      prompt,
+    });
+
+    return toWatchEvents(toSpoolRecord(payload, 1_800_000_000_000), () => true);
+  };
+
+  it('is shown as what was typed, without the context the editor sent along', () => {
+    const prompt =
+      '<ide_opened_file>The user opened the file /work/app.ts in the IDE.</ide_opened_file>\n' +
+      '<browser_instruction># How to use the browser\nMany lines.</browser_instruction>\n' +
+      'fix the failing test';
+
+    expect(submitted(prompt)).toMatchObject([
+      { kind: 'prompt.submitted', text: 'fix the failing test' },
+    ]);
+  });
+
+  it('is nothing to show when the editor sent only context', () => {
+    expect(submitted('<ide_selection>const a = 1;</ide_selection>')).toEqual([]);
+  });
+});

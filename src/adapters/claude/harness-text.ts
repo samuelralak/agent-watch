@@ -4,8 +4,17 @@
 const WRAPPERS =
   /<system-reminder>[\s\S]*?<\/system-reminder>|<tools-used-before-summary>[\s\S]*?<\/tools-used-before-summary>|<\/?persisted-output>/g;
 
-/** `text` without the wrappers Claude Code puts around tool output and prompts. */
-export const stripHarnessText = (text: string): string => text.replace(WRAPPERS, '');
+/**
+ * What an editor extension or the desktop app sends along with a prompt: the file that is
+ * open, what is selected, how to use the browser. It is context for the agent, not something
+ * the user typed.
+ */
+const ATTACHED_CONTEXT =
+  /<(ide_opened_file|ide_selection|ide_diagnostics|browser_instruction)>[\s\S]*?<\/\1>/g;
+
+/** `text` without what Claude Code and its front ends put around tool output and prompts. */
+export const stripHarnessText = (text: string): string =>
+  text.replace(WRAPPERS, '').replace(ATTACHED_CONTEXT, '');
 
 /** A notice about background work. Nobody typed it. */
 export const TASK_NOTIFICATION = /^\s*<task-notification>/;

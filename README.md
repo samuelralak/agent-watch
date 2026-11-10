@@ -36,7 +36,7 @@ watch.
 
 ## Install
 
-Needs Node.js 22.15 or later. Tested on macOS only, with Claude Code 2.1.317 to 2.1.322.
+Needs Node.js 22.15 or later. Tested on macOS only, with Claude Code 2.1.316 to 2.1.322.
 
 ```sh
 ./install.sh    # once, from a clone of this repository
