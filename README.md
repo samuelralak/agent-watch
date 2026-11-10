@@ -3,30 +3,7 @@
 See what your Claude Code subagents are doing, live, and message the main agent while you
 watch.
 
-```
- agentwatch                                               2 sessions · 1 agent at work · 1 asked you   14:02:37
-──────────────────────────────────────────┬────────────────────────────────────────────────────────────────────
-▌ api                          busy  48.2k│ api                                                            busy
-    ⠋ security                         35s│ /work/api · interactive · 1 agent running · 48.2k context
-      Bash 12s  Run the payment tests     │
-    ✓ data path                     7s ago│ ACTIVITY
-                                          │           $ npm test -- payments \
-  docs-site                      asked you│               --reporter verbose
-  ? Shall I publish them?                 │ ● data path
-                                          │ 14:02:30  ■ finished
-                                          │           A payment is validated in charge.ts, stored, then
-                                          │           confirmed by the webhook.
-                                          │
-                                          │           Step     │ File
-                                          │           ─────────┼───────────
-                                          │           validate │ charge.ts
-                                          │           confirm  │ webhook.ts
-┌ To api ─────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ Hold the merge until I have read its report.                                                                │
-│ Then run the refund tests too.                                                                              │
-└ ⏎ send · alt-⏎ new line · esc keeps draft ──────────────────────────────────── busy: at its next tool call ─┘
- approvals and answers to its questions go in its own terminal   ctrl-u/d scroll
-```
+![agentwatch: the sessions and their agents on the left, one agent's timeline on the right, the message box below](docs/images/agentwatch.png)
 
 ## Why
 
