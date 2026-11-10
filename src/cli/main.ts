@@ -31,8 +31,27 @@ const print = (line: string): void => {
   process.stdout.write(`${line}\n`);
 };
 
+/**
+ * Whoever reads the output may stop before all of it is written (`agentwatch --help | head`).
+ * That is the reader's choice, not an error: the command ends quietly.
+ */
+function endQuietlyWhenOutputCloses(): void {
+  process.stdout.on('error', (error: NodeJS.ErrnoException) => {
+    if (error.code === 'EPIPE') {
+      process.exit(0);
+    }
+
+    throw error;
+  });
+}
+
 /** Returns an exit code, or null when the command keeps running (the view, a stream). */
 async function run(options: CliOptions): Promise<number | null> {
+  // Watching has its own way out, which also gives the terminal back and lets go of its lock.
+  if (options.command !== 'watch') {
+    endQuietlyWhenOutputCloses();
+  }
+
   switch (options.command) {
     case 'help':
       print(USAGE);
